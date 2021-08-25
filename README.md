@@ -1,6 +1,6 @@
 # WiFi-enabled voltmeter managed by ESP8266 (esp-12e/f) (RTOS SDK based)
 
-![ESP-12ef-voltmeter](esp-12ef-voltmeter.jpg)
+
 
 ## Installation
 
