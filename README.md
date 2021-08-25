@@ -64,3 +64,27 @@ Run terminal emulator to see the ESP_LOGx(TAG,) messages:
 ```
 miniterm --raw /dev/ttyAMA1 74880
 ```
+
+## Operation
+
+The measured voltage is actually collected using a time series database (rrdtool) exposed via inetd daemon. For example,
+
+```
+rrdtool create /var/rrd/voltage.rrd \
+          --step 60s \
+          DS:voltage:GAUGE:60:0:16 \
+          RRA:AVERAGE:0.5:1m:1d \
+          RRA:AVERAGE:0.5:1h:1M \
+          RRA:AVERAGE:0.5:1d:10y \
+          RRA:MIN:0.5:1m:1d \
+          RRA:MIN:0.5:1h:1M \
+          RRA:MIN:0.5:1d:10y \
+          RRA:MAX:0.5:1m:1d \
+          RRA:MAX:0.5:1h:1M \
+          RRA:MAX:0.5:1d:10y
+
+vi /etc/inetd.conf
+0.0.0.0:rrdsrv stream tcp nowait root /usr/bin/rrdtool rrdtool - /var/rrd
+
+service inetd reload
+```
