@@ -36,14 +36,22 @@ Default is 33 meaning that the actual VCC will be used as a reference voltage.
 make
 ```
 
-Wiring:
+## Wiring
+
 VCC to 3.3V
+
 GND to ground
+
 EN, GPIO2 to 1 via 10K pull up resister.
+
 GPIO15 to 0 via 10K pull down resister.
+
 RX to TX (3.3v levels)
+
 TX to RX (3.3v levels)
+
 RST to GND to reset if needed without a pull-down resistor
+
 ADC to a voltage divider in kOhm range; for example, to measure 12V
 I use 200 Ohm from ADC to ground and 3.3kOhm from 12V to ADC, which
 gives nominal ratio 16.5 (12V / 16.5 = 0.72V on ADC pin (1.0V is max!). 
