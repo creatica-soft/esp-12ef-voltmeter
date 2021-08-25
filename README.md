@@ -46,18 +46,18 @@ make
 - RST to GND to reset if needed without a pull-down resistor
 - ADC to a voltage divider in kOhm range; 
  
-For example, to measure 12V I use 200 Ohm from ADC to ground and 3.3kOhm from 12V to ADC, which gives nominal ratio 16.5 (12V / 16.5 = 0.72V on ADC pin (1.0V is max!). 
+For example, to measure 12V I use 200 Ohm from ADC to ground and 3.3kOhm from 12V to ADC, which gives a nominal ratio 16.5 (12V / 16.5 = 0.72V on ADC pin (1.0V is max!). 
 
 To account for the actual ratio, the voltmeter needs a calibration using a digital voltmeter to calculate and adjust the nominal ratio - 
-see VOLTAGE_DIVIDER_RATIO define below.
+see VOLTAGE_DIVIDER_RATIO define in voltmeter.c file.
 
-Power off, ground GPIO0 via 10K pull down resister before flashing, power on
+Power off, ground GPIO0 via 10K pull down resister before flashing, power on.
 
 ```
 make flash
 ```
 
-Power off, unground GPIO0 for normal operation, power on
+Power off, unground GPIO0 for normal operation, power on.
 
 Run terminal emulator to see the ESP_LOGx(TAG,) messages:
 
