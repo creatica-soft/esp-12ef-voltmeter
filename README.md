@@ -59,7 +59,7 @@ Power off, ground GPIO0 via 10K pull down resister before flashing, power on.
 make flash
 ```
 
-Power off, unground GPIO0 for normal operation, power on.
+Power off, GPIO0 to VCC via 10K pull-up resistor for normal operation, power on.
 
 Run terminal emulator to see the ESP_LOGx(TAG,) messages:
 
