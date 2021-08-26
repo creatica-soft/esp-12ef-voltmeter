@@ -267,7 +267,7 @@ void save_data(float voltage) {
 	int n = write(rrd_sock, buf, strlen(buf));
 	if (n == -1) {
 		ESP_LOGE(TAG, "%serror writing to rrd: %s\n", asctime(localtime(&t)), strerror(errno));
-		if (errno == 32) { //broken pipe
+		if (errno == 32 || errno == 104) { //broken pipe or connection reset by peer
 			rrd_connect();
 			n = write(rrd_sock, buf, strlen(buf));
 			if (n == -1)
@@ -693,8 +693,6 @@ static esp_err_t event_handler(void *ctx, system_event_t *evt)
 		}
 		ESP_LOGW(TAG, "event_handler: disconnected from ssid %s, reason %s, re-connecting...",
 			evt->event_info.disconnected.ssid, reason);
-		ESP_LOGW(TAG, "event_handler: out of precausion turning relay off...");
-		gpio_set_level(GPIO_NUM_0, 1); //Set GPIO0 as high - level output.
 		//ESP_LOGI(TAG, "connecting to ap %s...", SSID);
 		err = esp_wifi_connect();
 		if (err != ESP_OK)
