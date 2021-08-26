@@ -87,7 +87,7 @@ rrdtool create /var/rrd/voltage.rrd \
           RRA:MAX:0.5:1d:10y
 
 vi /etc/inetd.conf
-0.0.0.0:rrdsrv stream tcp nowait root /usr/bin/rrdtool rrdtool - /var/rrd
+0.0.0.0:rrdsrv stream tcp nowait rrd /usr/bin/rrdtool rrdtool - /var/rrd
 
 service inetd reload
 ```
