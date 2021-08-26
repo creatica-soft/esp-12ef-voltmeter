@@ -94,3 +94,29 @@ service inetd reload
 ## OTA software update
 
 As usual, over-the-air software update is supported. See voltmeter.c file for details. Basically, just build a new image and host it on a web server. The voltmeter will download it and update itself.
+
+## Remote logging
+
+Same is true for remote logging. The simplest logging server can be defined as an openrc service like that:
+
+```
+#!/sbin/openrc-run
+
+name=${RC_SVCNAME}
+description="Logging daemon"
+command="nc"
+command_args="-ulkn 0.0.0.0 6666"
+command_user="root:root"
+supervisor=supervise-daemon
+respawn_delay=5
+respawn_max=0
+supervise_daemon_args="--stdout /var/log/voltmeter.log"
+umask=0027
+pidfile="/run/${RC_SVCNAME}.pid"
+command_background="yes"
+output_logger="/usr/bin/logger"
+
+depend() {
+  need net
+}
+```
