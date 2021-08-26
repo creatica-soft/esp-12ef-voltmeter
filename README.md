@@ -74,7 +74,7 @@ The measured voltage is actually collected using a time series database (rrdtool
 ```
 rrdtool create /var/rrd/voltage.rrd \
           --step 60s \
-          DS:voltage:GAUGE:60:0:16 \
+          DS:voltage:GAUGE:60:10:16 \
           RRA:AVERAGE:0.5:1m:1d \
           RRA:AVERAGE:0.5:1h:1M \
           RRA:AVERAGE:0.5:1d:10y \
