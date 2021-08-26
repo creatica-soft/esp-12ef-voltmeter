@@ -66,6 +66,7 @@ Run terminal emulator to see the ESP_LOGx(TAG,) messages:
 ```
 miniterm --raw /dev/ttyAMA1 74880
 ```
+Alternatively, see them in a remote logging server - details are below.
 
 ## Operation
 
