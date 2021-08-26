@@ -1,4 +1,4 @@
-# WiFi-enabled voltmeter managed by ESP8266 (esp-12e/f) (RTOS SDK based)
+# WiFi-enabled voltmeter based on ESP8266 (esp-12e/f) (RTOS SDK based)
 
 ![ESP-12e-voltmeter](esp-12e-voltmeter.jpg)
 
