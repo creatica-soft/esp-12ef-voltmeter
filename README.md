@@ -70,7 +70,7 @@ Alternatively, see them in a remote logging server - details are below.
 
 ## Operation
 
-The voltmeter in theory is capable of 10MHz voltage collection rate depending on the CLOCK_DIVIDER define (see above), which ranges from 8 to 32.
+The voltmeter in theory is capable of 10MHz voltage collection rate depending on the CLOCK_DIVIDER define (see voltmeter.c file), which ranges from 8 to 32.
 
 This allows to use the voltmeter as a very cheap osciloscope capable of measuring signal frequencies of up to 10Mhz.
 
