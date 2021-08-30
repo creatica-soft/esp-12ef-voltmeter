@@ -197,7 +197,9 @@ I (2856) voltmeter: free heap size 67948
 // Calibration reflects the fact that the actual VCC is not exactly 3.3V
 // and that the actual resistence ratio is not exactly 16.5
 #define VOLTAGE_DIVIDER_RATIO 17.1949878
-
+// see https://docs.espressif.com/projects/esp8266-rtos-sdk/en/latest/api-reference/peripherals/adc.html adc_config_t.clk_div range [8..32]
+// ADC sample collection rate=80MHz/clk_div with the max rate of 10MHZ if CLOCK_DIVIER = 8
+#define CLOCK_DIVIDER 32
 #define REMOTE_LOGGING true
 #define REMOTE_LOGGING_IP "192.168.1.1"
 #define REMOTE_LOGGING_UDP_PORT 6666
@@ -560,7 +562,7 @@ static void esp_config_task(void *arg)
 			// mode values: ADC_READ_TOUT_MODE = 0, ADC_READ_VDD_MODE, ADC_READ_MAX_MODE
 			adc_config.mode = ADC_READ_TOUT_MODE;
 			//ADC sample collection clock=80M/clk_div, range[8, 32]
-			adc_config.clk_div = 32;
+			adc_config.clk_div = CLOCK_DIVIDER;
 			if (ESP_OK != adc_init(&adc_config))
 				ESP_LOGE(TAG, "esp_config_task: failed to initialize ADC");
 
