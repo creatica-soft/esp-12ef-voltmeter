@@ -41,11 +41,11 @@ make
 ## Wiring
 - VCC to 3.3V
 - GND to ground
-- EN, GPIO2 to 1 via 10K pull up resister
-- GPIO15 to 0 via 10K pull down resister
+- EN, GPIO2 to VCC via 10K pull up resister
+- GPIO15 to GND via 10K pull down resister
 - RX to TX (3.3v levels)
 - TX to RX (3.3v levels)
-- RST to GND to reset if needed without a pull-down resistor
+- RST to GND to reset if needed without a pull-down resistor (a 10K resister may be used between RST and GND for normal operation if needed for stability, in my case it works without it)
 - ADC to a voltage divider in kOhm range; 
  
 For example, to measure 12V I use 200 Ohm from ADC to ground and 3.3kOhm from 12V to ADC, which gives a nominal ratio 16.5 (12V / 16.5 = 0.72V on ADC pin (1.0V is max!). 
