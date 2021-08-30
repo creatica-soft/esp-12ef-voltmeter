@@ -70,6 +70,10 @@ Alternatively, see them in a remote logging server - details are below.
 
 ## Operation
 
+The voltmeter in theory is capable of 10MHz voltage collection rate depending on the CLOCK_DIVIER define (see above), which ranges from 8 to 32.
+
+This allows to use the voltmeter as a very cheap osciloscope capable of measuring signal frequencies of up to 10Mhz.
+
 The measured voltage is actually collected using a time series database (rrdtool) exposed via inetd daemon. For example,
 
 ```
