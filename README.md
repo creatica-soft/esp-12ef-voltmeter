@@ -96,6 +96,8 @@ vi /etc/inetd.conf
 service inetd reload
 ```
 
+Alternatively, one can use rrdcached instead of inetd, especially if the program is adopted to work as a memorising osciloscope.
+
 ## OTA software update
 
 As usual, over-the-air software update is supported. See voltmeter.c file for details. Basically, just build a new image and host it on a web server. The voltmeter will download it and update itself.
