@@ -232,7 +232,7 @@ int rrd_sock, rrd_port = RRD_PORT;
 const char * rrd_host = RRD_HOST;
 const char * rrd_db_file = RRD_DB;
 
-void rrd_connect() {
+int rrd_connect() {
 	struct sockaddr_in sock_addr = {
 		.sin_family = AF_INET,
 		.sin_port = htons(rrd_port) //converts port from host to network byte order
@@ -241,23 +241,25 @@ void rrd_connect() {
 	int res = inet_aton(rrd_host, &sock_addr.sin_addr);
 	if (res == 0) {
 		ESP_LOGE(TAG, "rrd_connect: inet_aton() - bad IP address of RRD_HOST");
-		exit(-1);
+		return 1;
 	}
 	//rrdtool listens on rrd_host:13900/tcp
-	if (rrd_sock) close(rrd_sock);
+	if (rrd_sock > 0) close(rrd_sock);
 	rrd_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (rrd_sock == -1) {
 		ESP_LOGE(TAG, "rrd_connect: error creating rrdtool socket");
-		exit(-1);
+		return 2;
 	}
 	res = connect(rrd_sock, (struct sockaddr *)&sock_addr, sizeof(sock_addr));
 	if (res == -1) {
 		ESP_LOGE(TAG, "rrd_connect: connect() failed");
-		exit(-1);
+		if (rrd_sock > 0) close(rrd_sock);
+		return 3;
 	}
+	return 0;
 }
 
-void save_data(float voltage) {
+int save_data(float voltage) {
 	time_t t = time(NULL);
 
 	ESP_LOGI(TAG, "House battery voltage %.3f V\n", voltage);
@@ -269,13 +271,9 @@ void save_data(float voltage) {
 	int n = write(rrd_sock, buf, strlen(buf));
 	if (n == -1) {
 		ESP_LOGE(TAG, "%serror writing to rrd: %s\n", asctime(localtime(&t)), strerror(errno));
-		if (errno == 32 || errno == 104) { //broken pipe or connection reset by peer
-			rrd_connect();
-			n = write(rrd_sock, buf, strlen(buf));
-			if (n == -1)
-				ESP_LOGE(TAG, "%serror writing to rrd: %s\n", asctime(localtime(&t)), strerror(errno));
-		}
+		return 1;
 	}
+	return 0;
 }
 
 static char * authmode(wifi_auth_mode_t mode) {
@@ -321,8 +319,9 @@ static void voltmeter_task(void *arg) {
 		esp_err_t status = adc_read(&voltage);
 		if (status != ESP_OK)
 			ESP_LOGE(TAG, "%s adc_read(&voltage) returned %d\n", asctime(&timeinfo), status);
-
+                if (rrd_connect()) continue;
 		save_data(voltage * VOLTAGE_DIVIDER_RATIO / MAX_VOLTAGE_MV);
+		if (rrd_sock > 0) close(rrd_sock);
 
 		hwm = uxTaskGetStackHighWaterMark(NULL);
 		if (hwm <= HIGH_WATER_MARK_CRITICAL)
