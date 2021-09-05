@@ -318,10 +318,15 @@ static void voltmeter_task(void *arg) {
 
 		esp_err_t status = adc_read(&voltage);
 		if (status != ESP_OK)
-			ESP_LOGE(TAG, "%s adc_read(&voltage) returned %d\n", asctime(&timeinfo), status);
+			ESP_LOGE(TAG, "%s voltmeter_task: adc_read(&voltage) returned %d\n", asctime(&timeinfo), status);
                 if (rrd_connect()) continue;
 		save_data(voltage * VOLTAGE_DIVIDER_RATIO / MAX_VOLTAGE_MV);
-		if (rrd_sock > 0) close(rrd_sock);
+		if (rrd_sock > 0) {
+			status = shutdown(rrd_sock, SHUT_RDWR);
+			if (status != 0)
+				ESP_LOGE(TAG, "%s voltmeter_task: shutdown(rrd_sock, SHUT_RDWR) returned %d\n", asctime(&timeinfo), status);
+			close(rrd_sock);
+		}
 
 		hwm = uxTaskGetStackHighWaterMark(NULL);
 		if (hwm <= HIGH_WATER_MARK_CRITICAL)
